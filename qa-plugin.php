@@ -19,7 +19,7 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 }
 
 	qa_register_plugin_module('event', 'qa-category-email-notifications-event.php', 'qa_category_email_notifications_event', 'Category Email Notifications');
-
+	qa_register_plugin_phrases('language/qa-email-notification-lang-*.php', 'notify');
 
 /*
         Omit PHP closing tag to help avoid accidental output
