@@ -1,9 +1,9 @@
 <?php
 
 /*
-	Plugin Name: Email Notifications
+	Plugin Name: Category/Tag Email Notification
 	Plugin URI: http://amiyasahu.com
-	Plugin Description: Sends email for new questions, to users who favoritised the category where it was posted
+	Plugin Description: Sends email for new questions, to users who is following a catogory or 
 	Plugin Version: 0.1
 	Plugin Date: 2014-04-20
 	Plugin Author: Amiya Sahu
@@ -18,8 +18,8 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 	exit;
 }
 
-	qa_register_plugin_module('event', 'qa-category-email-notifications-event.php', 'qa_category_email_notifications_event', 'Category Email Notifications');
-	qa_register_plugin_phrases('language/qa-email-notification-lang-*.php', 'notify');
+qa_register_plugin_module('event', 'qa-email-notifications-event.php', 'qa_email_notifications_event', 'Category/Tag Email Notifications');
+qa_register_plugin_phrases('language/qa-email-notification-lang-*.php', 'notify');
 
 /*
         Omit PHP closing tag to help avoid accidental output
