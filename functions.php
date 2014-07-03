@@ -5,7 +5,7 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
       exit;
 }
 
-function reset_all_notification_options() {
+function ami_reset_all_notification_options() {
       qa_opt('ami_email_notf_allow_cat_follower',  false);
       qa_opt('ami_email_notf_allow_tag_follower',  false);
       qa_opt('ami_email_notf_allow_user_follower', false);
@@ -13,16 +13,16 @@ function reset_all_notification_options() {
       qa_opt('ami_email_notf_min_point_val',       false);
 }
 
-function reset_all_notification_points_options() {
+function ami_reset_all_notification_points_options() {
       qa_opt('ami_email_notf_min_point',     false);
       qa_opt('ami_email_notf_min_point_val', false);
 }
 
-function set_all_notification_options() {
+function ami_set_all_notification_options() {
 
       $error = array();
       //if plugin is enabled then atlest one option has to be enabled 
-      if (options_selected()) {
+      if (ami_options_selected()) {
             qa_opt('ami_email_notf_allow_cat_follower',  !!qa_post_text('ami_email_notf_allow_cat_follower'));
             qa_opt('ami_email_notf_allow_tag_follower',  !!qa_post_text('ami_email_notf_allow_tag_follower'));
             qa_opt('ami_email_notf_allow_user_follower', !!qa_post_text('ami_email_notf_allow_user_follower'));
@@ -35,27 +35,27 @@ function set_all_notification_options() {
                         qa_opt('ami_email_notf_min_point_val', (int) $minimum_user_point_value);
                   } else if (!!$minimum_user_point_value && (!is_numeric($minimum_user_point_value) || $minimum_user_point_value <= 0)) {
                         // the minimum_user_point_value is set but the value is not valid
-                        reset_all_notification_points_options();
+                        ami_reset_all_notification_points_options();
                         //send a error message to UI 
                         $error['enter_point_value'] = qa_lang('notify/point_value_should_numeric');
                   } else {
-                        reset_all_notification_points_options();
+                        ami_reset_all_notification_points_options();
                         //send a error message to UI 
                         $error['enter_point_value'] = qa_lang('notify/point_value_required'); ;
                   }
             } else {
-                  reset_all_notification_points_options();
+                  ami_reset_all_notification_points_options();
             }
       } else {
             //if none of the elements are selected disable the plugin and send a error message UI 
             qa_opt('ami_email_notf_enable_plugin', false);
-            reset_all_notification_options();
+            ami_reset_all_notification_options();
             $error['no_options_selected'] = qa_lang('notify/choose_atleast_one_opt');
       }
       return $error;
 }
 
-function options_selected() {
+function ami_options_selected() {
       return ((!!qa_post_text('ami_email_notf_allow_cat_follower')) ||
               (!!qa_post_text('ami_email_notf_allow_tag_follower')) ||
               (!!qa_post_text('ami_email_notf_allow_user_follower')) );

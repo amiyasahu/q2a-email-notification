@@ -202,9 +202,9 @@ class qa_email_notifications_event {
                   qa_opt('ami_email_notf_enable_plugin', $enable_plugin);
                   if (!$enable_plugin) {
                         //if the plugin is disabled then turn off all features 
-                        reset_all_notification_options();
+                        ami_reset_all_notification_options();
                   } else {
-                        $response = set_all_notification_options();
+                        $response = ami_set_all_notification_options();
                         //$error will be false if the 
                         $error = (isset($response) && is_array($response) && !empty($response)) ? true : false;
                   }
