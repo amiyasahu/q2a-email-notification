@@ -4,8 +4,8 @@
 	Plugin Name: Category/Tag Email Notification
 	Plugin URI: https://github.com/amiyasahu/q2a-email-notification
 	Plugin Description: Notifies a user when a new question is asked in his favorite tag or category 
-	Plugin Version: 1.0
-	Plugin Date: 2014-07-20
+	Plugin Version: 1.2
+	Plugin Date: 2014-09-15
 	Plugin Author: Amiya Sahu
 	Plugin Author URI: http://amiyasahu.com
 	Plugin License: MIT License
