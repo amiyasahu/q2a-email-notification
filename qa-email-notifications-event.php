@@ -19,10 +19,10 @@ class qa_email_notifications_event {
       public $log_file_name, $log_file_exists, $log_file;
 
       function process_event($event, $userid, $handle, $cookieid, $params) {
-            if ($this->plugin_enabled_from_admin_panel()) {  //proceed only if the plugin is enabled 
-                  require_once QA_INCLUDE_DIR . 'qa-app-emails.php';
-                  require_once QA_INCLUDE_DIR . 'qa-app-format.php';
-                  require_once QA_INCLUDE_DIR . 'qa-util-string.php';
+            if ($this->plugin_enabled_from_admin_panel()) {  //proceed only if the plugin is enabled
+                  require_once QA_INCLUDE_DIR . 'app/emails.php';
+                  require_once QA_INCLUDE_DIR . 'app/format.php';
+                  require_once QA_INCLUDE_DIR . 'util/string.php';
                   switch ($event) {
                         case 'q_post':
 
@@ -37,7 +37,7 @@ class qa_email_notifications_event {
                                           $bcclist[] = $emails[$i]['email'];
                                     }
 
-                                    $this->category_email_notification_send_notification($bcclist, null, null, qa_lang('emails/q_posted_subject'), qa_lang('notify/q_posted_body'), 
+                                    $this->category_email_notification_send_notification($bcclist, null, null, qa_lang('emails/q_posted_subject'), qa_lang('notify/q_posted_body'),
                                         array(
                                         '^q_handle'  => isset($handle) ? $handle : qa_lang('main/anonymous'),
                                         '^q_title'   => $params['title'], // don't censor title or content here since we want the admin to see bad words
@@ -48,13 +48,13 @@ class qa_email_notifications_event {
                                     );
                               }
                               break;
-                  } //switch 
-            }//if 
+                  } //switch
+            }//if
       }
 
       function qa_db_notificaton_emails_selectspec($userid, $tags, $categoryid) {
             if ($this->plugin_enabled_from_admin_panel()) {  //proceed only if the plugin is enabled
-                  require_once QA_INCLUDE_DIR . 'qa-app-updates.php';
+                  require_once QA_INCLUDE_DIR . 'app/updates.php';
 
                   $source = '';
                   $arguments = array();
@@ -66,7 +66,7 @@ class qa_email_notifications_event {
                   }
                   if (!!qa_opt('ami_email_notf_allow_tag_follower') && !!$tags) {
                         $source .= (!!$source) ? ' UNION ' : '';
-                        $source .= "( SELECT ^users.email , 'T' as favorited , ^userpoints.points from ^users JOIN ^userpoints ON ^users.userid=^userpoints.userid JOIN ^userfavorites ON ^userfavorites.userid=^users.userid WHERE ^userfavorites.entityid IN 
+                        $source .= "( SELECT ^users.email , 'T' as favorited , ^userpoints.points from ^users JOIN ^userpoints ON ^users.userid=^userpoints.userid JOIN ^userfavorites ON ^userfavorites.userid=^users.userid WHERE ^userfavorites.entityid IN
                             ( SELECT wordid from ^words where ^words.word IN ($) ) AND ^userfavorites.entitytype=$ AND ^users.email !=$ )";
                         $args = array(qa_tagstring_to_tags($tags), QA_ENTITY_TAG, qa_get_logged_in_user_field('email'));
                         $arguments = array_merge($arguments, $args);
@@ -80,7 +80,7 @@ class qa_email_notifications_event {
                   }
                   $where_clause = '';
                   if (!!qa_opt('ami_email_notf_min_point')) {
-                        //generate where clause 
+                        //generate where clause
                         $min_user_points = qa_opt('ami_email_notf_min_point_val');
                         $where_clause    = ((!!$min_user_points && ( $min_user_points > 0) )) ? 'where result.points > ' . $min_user_points : '';
                   }
@@ -90,7 +90,7 @@ class qa_email_notifications_event {
                       'arguments' => $arguments,
                       'sortasc'   => 'title',
                   );
-            }  //if plugin is enabled 
+            }  //if plugin is enabled
       }
 
 //qa_db_notificaton_emails_selectspec
@@ -120,8 +120,8 @@ class qa_email_notifications_event {
 
             if ($qa_notifications_suspended > 0) return false;
 
-            require_once QA_INCLUDE_DIR . 'qa-db-selects.php';
-            require_once QA_INCLUDE_DIR . 'qa-util-string.php';
+            require_once QA_INCLUDE_DIR . 'db/selects.php';
+            require_once QA_INCLUDE_DIR . 'util/string.php';
 
             $subs['^site_title'] = qa_opt('site_title');
             $subs['^handle']     = $handle;
@@ -147,8 +147,7 @@ class qa_email_notifications_event {
                   return qa_call_override(__FUNCTION__, $args);
             }
 
-            require_once QA_INCLUDE_DIR . 'qa-class.phpmailer.php';
-
+            require_once QA_INCLUDE_DIR . 'vendor/PHPMailer/PHPMailerAutoload.php';
             $mailer = new PHPMailer();
             $mailer->CharSet = 'utf-8';
 
@@ -191,7 +190,7 @@ class qa_email_notifications_event {
 
       function admin_form(&$qa_content) {
 
-            //add the functions 
+            //add the functions
             require_once EMAIL_NOTF_PLUGIN_DIR . '/functions.php';
             //	Process form input
 
@@ -201,11 +200,11 @@ class qa_email_notifications_event {
                   $enable_plugin = !!qa_post_text('ami_email_notf_enable_plugin');
                   qa_opt('ami_email_notf_enable_plugin', $enable_plugin);
                   if (!$enable_plugin) {
-                        //if the plugin is disabled then turn off all features 
+                        //if the plugin is disabled then turn off all features
                         ami_reset_all_notification_options();
                   } else {
                         $response = ami_set_all_notification_options();
-                        //$error will be false if the 
+                        //$error will be false if the
                         $error = (isset($response) && is_array($response) && !empty($response)) ? true : false;
                   }
 
@@ -273,7 +272,7 @@ class qa_email_notifications_event {
                         'tags'  => 'name="ami_email_notf_min_point_val" id="ami_email_notf_min_point_val" ',
                         'error' => qa_html(@$err_enter_point_value),
                     ),
-                    
+
                 ),
                 'buttons' => array(
                     array(
