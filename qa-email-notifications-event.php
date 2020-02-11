@@ -54,7 +54,7 @@ class qa_email_notifications_event {
 
       function qa_db_notificaton_emails_selectspec($userid, $tags, $categoryid) {
             if ($this->plugin_enabled_from_admin_panel()) {  //proceed only if the plugin is enabled
-                  require_once QA_INCLUDE_DIR . 'qa-app-updates.php';
+                  require_once QA_INCLUDE_DIR . 'app/updates.php';
 
                   $source = '';
                   $arguments = array();
@@ -120,8 +120,8 @@ class qa_email_notifications_event {
 
             if ($qa_notifications_suspended > 0) return false;
 
-            require_once QA_INCLUDE_DIR . 'qa-db-selects.php';
-            require_once QA_INCLUDE_DIR . 'qa-util-string.php';
+            require_once QA_INCLUDE_DIR . 'db/selects.php';
+            require_once QA_INCLUDE_DIR . 'util/string.php';
 
             $subs['^site_title'] = qa_opt('site_title');
             $subs['^handle']     = $handle;
@@ -147,8 +147,7 @@ class qa_email_notifications_event {
                   return qa_call_override(__FUNCTION__, $args);
             }
 
-            require_once QA_INCLUDE_DIR . 'qa-class.phpmailer.php';
-
+            require_once QA_INCLUDE_DIR . 'vendor/PHPMailer/PHPMailerAutoload.php';
             $mailer = new PHPMailer();
             $mailer->CharSet = 'utf-8';
 
